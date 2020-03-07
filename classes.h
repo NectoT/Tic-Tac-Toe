@@ -1,6 +1,8 @@
 ﻿#pragma once
 
 #include <tuple>
+#include <fstream>
+#include <string>
 
 using namespace std;
 
@@ -9,14 +11,19 @@ public:
 
 	virtual tuple<int, int> makeTurn(int const& fields) const; // виртуальная функция - то есть в классах наследниках она может быть переопределена
 
-	virtual void setSide(char side);
+	virtual char getSide() const;
 
-	virtual char getSide();
+	virtual char* getName() const;
 
 private:
-	Player(); // Конструктор в привате чтобы нельзя было создать базовый класс Player, только его наследников
+
+	virtual void setSide(char side);
+
+	virtual void setName();
 
 protected:
+	Player(); // Конструктор в протектеде чтобы нельзя было создать базовый класс Player, только его наследников
+
 	char* name;
 	char side; // Сторона, за которую играет Player - 'x' или 'o'
 };
@@ -70,6 +77,8 @@ public:
 
 	void gameflow();
 
+private:
+
 	char* drawFields() const;
 
 	char* drawX() const;
@@ -80,17 +89,18 @@ public:
 
 	void setField(int x, int y, char state);
 
+	void createSave();
+
 	void editSave(int x, int y, char state);
 
 	void deleteSave();
 
 	void checkVictory();
 
-private:
-	const Player& player1;
-	const Player& player2;
+	const Player* player1;
+	const Player* player2;
 
-	int* fields; // Двумерный массив 3x3
+	int** fields; // Двумерный массив 3x3
 
 	tuple<bool, const char*> game_state; // первый элемент - само состояние, второй - описание причины этого состояния
 
